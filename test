@@ -1,0 +1,81 @@
+#include "inventory.h"
+
+// 파생 클래스 예제
+class Weapon : public Item {
+private:
+    int damage_;
+    
+public:
+    Weapon(const string& name = "", int price = 0, int damage = 0)
+        : Item(name, price), damage_(damage) {}
+    
+    void PrintInfo() const {
+        cout << "[무기: " << GetName() << ", 가격: " << GetPrice() 
+             << "G, 공격력: " << damage_ << "]" << endl;
+    }
+};
+
+class Potion : public Item {
+private:
+    int healAmount_;
+    
+public:
+    Potion(const string& name = "", int price = 0, int heal = 0)
+        : Item(name, price), healAmount_(heal) {}
+    
+    void PrintInfo() const {
+        cout << "[포션: " << GetName() << ", 가격: " << GetPrice() 
+             << "G, 회복량: " << healAmount_ << "]" << endl;
+    }
+};
+
+int main() {
+    cout << "=== 인벤토리 시스템 테스트 ===" << endl;
+    
+    // 1. Item 인벤토리 테스트
+    cout << "\n[Item 인벤토리 테스트]" << endl;
+    Inventory<Item> itemInventory(3);
+    
+    itemInventory.AddItem(Item("검", 100));
+    itemInventory.AddItem(Item("방패", 150));
+    itemInventory.AddItem(Item("포션", 50));
+    itemInventory.PrintAllItems();
+    
+    // 자동 확장 테스트
+    itemInventory.AddItem(Item("갑옷", 200));
+    itemInventory.PrintAllItems();
+    
+    // 정렬 테스트
+    cout << "\n[정렬 테스트]" << endl;
+    itemInventory.SortItems();
+    itemInventory.PrintAllItems();
+    
+    // 2. Weapon 인벤토리 테스트
+    cout << "\n[Weapon 인벤토리 테스트]" << endl;
+    Inventory<Weapon> weaponInventory(5);
+    
+    weaponInventory.AddItem(Weapon("롱소드", 500, 50));
+    weaponInventory.AddItem(Weapon("대거", 200, 20));
+    weaponInventory.AddItem(Weapon("배틀액스", 800, 80));
+    weaponInventory.PrintAllItems();
+    
+    // 3. 복사 생성자 테스트
+    cout << "\n[복사 생성자 테스트]" << endl;
+    Inventory<Item> copiedInventory(itemInventory);
+    copiedInventory.PrintAllItems();
+    
+    // 4. 제거 기능 테스트
+    cout << "\n[아이템 제거 테스트]" << endl;
+    itemInventory.RemoveLastItem();
+    itemInventory.PrintAllItems();
+    
+    // 5. 빈 인벤토리 테스트
+    cout << "\n[빈 인벤토리 테스트]" << endl;
+    Inventory<Potion> emptyInventory(2);
+    emptyInventory.PrintAllItems();
+    emptyInventory.RemoveLastItem();  // 비어있을 때 제거 시도
+    
+    cout << "\n=== 테스트 종료 ===" << endl;
+    
+    return 0;
+}
